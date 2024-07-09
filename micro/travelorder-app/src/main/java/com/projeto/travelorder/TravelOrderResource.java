@@ -3,10 +3,7 @@ package com.projeto.travelorder;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.projeto.flight.Flight;
-import com.projeto.flight.FlightResource;
-import com.projeto.hotel.Hotel;
-import com.projeto.hotel.HotelResource;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -22,10 +19,12 @@ import jakarta.ws.rs.core.MediaType;
 public class TravelOrderResource {
     
     @Inject
-    FlightResource flightResource;
-
+    @RestClient
+    FlightService flightService;
+    
     @Inject
-    HotelResource hotelResource;
+    @RestClient
+    HotelService hotelService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -34,8 +33,8 @@ public class TravelOrderResource {
                 .map(
                     order -> TravelOrderDTO.of(
                         order, 
-                        flightResource.findByTravelOrderId(order.id),
-                        hotelResource.findByTravelOrderId(order.id)
+                        flightService.findByTravelOrderId(order.id),
+                        hotelService.findByTravelOrderId(order.id)
                     )
                 ).collect(Collectors.toList());
     }
@@ -56,15 +55,15 @@ public class TravelOrderResource {
         travelOrder.persist();
 
         Flight flight = new Flight();
-        flight.fromAirport = travelOrderDTO.getFromAirport();
-        flight.toAirport = travelOrderDTO.getToAirport();
-        flight.travelOrderId = travelOrder.id;
-        flightResource.newFlight(flight);
+        flight.setFromAirport(travelOrderDTO.getFromAirport());
+        flight.setToAirport(travelOrderDTO.getToAirport());
+        flight.setTravelOrderId(travelOrder.id);
+        flightService.newFlight(flight);
 
         Hotel hotel = new Hotel();
-        hotel.nights = travelOrderDTO.getNights();
-        hotel.travelOrderId = travelOrder.id;
-        hotelResource.newHotel(hotel);
+        hotel.setNights(travelOrderDTO.getNights());
+        hotel.setTravelOrderId(travelOrder.id);
+        hotelService.newHotel(hotel);
 
         return travelOrder;
     }

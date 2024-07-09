@@ -1,5 +1,4 @@
 create sequence travelorder_sequence start with 1 increment by 1;
-
 INSERT INTO TravelOrder(id) VALUES (nextval('travelorder_sequence'));
 INSERT INTO TravelOrder(id) VALUES (nextval('travelorder_sequence'));
 INSERT INTO TravelOrder(id) VALUES (nextval('travelorder_sequence'));
@@ -12,7 +11,6 @@ INSERT INTO Flight(id, travelOrderId, fromAirport, toAirport) VALUES (nextval('f
 INSERT INTO Flight(id, travelOrderId, fromAirport, toAirport) VALUES (nextval('flight_sequence'), 2, 'GRU', 'ATL');
 INSERT INTO Flight(id, travelOrderId, fromAirport, toAirport) VALUES (nextval('flight_sequence'), 4, 'GRU', 'MEX');
 INSERT INTO Flight(id, travelOrderId, fromAirport, toAirport) VALUES (nextval('flight_sequence'), 5, 'GRU', 'ARG');
-
 
 create sequence hotel_sequence start with 1 increment by 1;
 INSERT INTO Hotel(id, travelOrderId, nights) VALUES (nextval('hotel_sequence'), 1, 5);
